@@ -21,6 +21,7 @@ const int16_t BloodRed = 0xFDE0;
 const int16_t StripeBrown = 0x1988;
 const int16_t LeafGreen = 0x0342;
 
+
 void showTitleScreen(void){
 	ST7735_SetRotation(1);
 	ST7735_DrawBitmap(0, 127, TitleScreen, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
@@ -30,6 +31,7 @@ void showTitleScreen(void){
 	while ((GPIO_PORTE_DATA_R & 0x03) == 0x00){}
 	while ((GPIO_PORTE_DATA_R & 0x03) == 0x01){}
 }
+
 
 uint8_t language;
 void languageSelect(void){
@@ -56,7 +58,7 @@ void languageSelect(void){
 			break;
 		case 1:
 			GPIO_PORTB_DATA_R |= 0x40; 	// toggle PB6
-			ST7735_DrawStringBG(1, 8, "R2:FRANCAIS", ST7735_GREEN, SkyBlue); //FIGURE OUT ACCENT FRANÇAIS
+			ST7735_DrawStringBG(1, 8, "R2:FRANCAIS", ST7735_GREEN, SkyBlue); //FIGURE OUT ACCENT FRANï¿½AIS
 			delay100ms(2);
 			ST7735_DrawStringBG(1, 8, "R2:FRANCAIS", ST7735_WHITE, SkyBlue);
 			delay100ms(2);
@@ -74,6 +76,7 @@ void languageSelect(void){
 	ST7735_DrawStringBG(1, 10, "L2:==>", ST7735_YELLOW, HillGreen);
 	GPIO_PORTB_DATA_R &= ~0xC0; 	// Turn LEDS off
 }
+
 
 struct Entity{
 	uint8_t x;
@@ -173,7 +176,6 @@ void mazeInit(void){
 }
 
 
-
 bool checkOverlap(Entity_t sprite1, Entity_t sprite2) {
     // calculate the coordinates of the top-right corner of each sprite
     uint8_t x1Max = sprite1.x + sprite1.width;
@@ -190,7 +192,6 @@ bool checkOverlap(Entity_t sprite1, Entity_t sprite2) {
         return false;
     }
 }
-
 
 
 void mazeBattle(Entity_t *player, Entity_t *enemy, uint8_t enemyType){
@@ -248,7 +249,7 @@ void mazeBattle(Entity_t *player, Entity_t *enemy, uint8_t enemyType){
 				ST7735_DrawStringBG(5, 1, "VIES:", ST7735_GREEN, LeafGreen);
 				ST7735_OutUDecBG(11, 1, Simba.lives, ST7735_GREEN, LeafGreen);
 				ST7735_DrawStringBG(2, 11, "R1:ATTAQUER", ST7735_WHITE, GrassGreen);
-				ST7735_DrawStringBG(8, 12, "R2:DEFENDRE", ST7735_WHITE, GrassGreen); //FIGURE OUT ACCENT DÉFENDRE
+				ST7735_DrawStringBG(8, 12, "R2:DEFENDRE", ST7735_WHITE, GrassGreen); //FIGURE OUT ACCENT Dï¿½FENDRE
 				while ((GPIO_PORTE_DATA_R & 0x0C) == 0x00){}
 				if ((GPIO_PORTE_DATA_R & 0x08) == 0x08){
 					GPIO_PORTB_DATA_R |= 0x80; 	// toggle PB7
@@ -424,6 +425,12 @@ void mazeBattle(Entity_t *player, Entity_t *enemy, uint8_t enemyType){
 	ST7735_SetRotation(1);
 	ST7735_DrawBitmap(0, 127, JungleMaze, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 }
+
+
+uint8_t randomizePosition(Entity_t *sprite, uint8_t lowLim, uint8_t upLim,){
+	
+}
+
 
 int8_t gameStatus = 0;
 uint32_t LStick[2];
@@ -682,6 +689,7 @@ void youWin(void){
 	GPIO_PORTB_DATA_R &= ~0xC0; 	// TURN OFF LEDS
 }
 
+
 void gameOver(void){
 	ST7735_SetRotation(1);
 	ST7735_DrawBitmap(0, 127, TitleScreen, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
@@ -698,6 +706,7 @@ void gameOver(void){
 	}
 	GPIO_PORTB_DATA_R &= ~0xC0; 	// TURN OFF LEDS
 }
+
 
 void mainEngine(void){
 	showTitleScreen();
