@@ -21,6 +21,45 @@ const int16_t BloodRed = 0xFDE0;
 const int16_t StripeBrown = 0x1988;
 const int16_t LeafGreen = 0x0342;
 
+struct Entity{
+	uint8_t x;
+	uint8_t y;
+	uint8_t lives;
+	uint8_t width;
+	uint8_t height;
+} typedef Entity_t;
+	
+Entity_t Simba;
+Entity_t Hyena1;
+Entity_t Hyena2;
+Entity_t Hyena3;
+Entity_t Scar;
+Entity_t Friend1;
+Entity_t Friend2;
+Entity_t Friend3;
+Entity_t Home;
+
+static uint8_t orient;
+static uint8_t lxNew;
+static uint8_t rxNew;
+static uint8_t uyNew;
+static uint8_t dyNew;
+
+static uint8_t H1mvct;
+static uint8_t H2mvct;
+static uint8_t H3mvct;
+static uint8_t Scmvct;
+static uint8_t F1mvct;
+static uint8_t F2mvct;
+static uint8_t F3mvct;
+
+static uint8_t H1vec;
+static uint8_t H2vec;
+static uint8_t H3vec;
+static uint8_t Scvec;
+static uint8_t F1vec;
+static uint8_t F2vec;
+static uint8_t F3vec;
 
 void showTitleScreen(void){
 	ST7735_SetRotation(1);
@@ -77,29 +116,6 @@ void languageSelect(void){
 	GPIO_PORTB_DATA_R &= ~0xC0; 	// Turn LEDS off
 }
 
-
-struct Entity{
-	uint8_t x;
-	uint8_t y;
-	uint8_t lives;
-	uint8_t width;
-	uint8_t height;
-} typedef Entity_t;
-	
-Entity_t Simba;
-Entity_t Hyena1;
-Entity_t Hyena2;
-Entity_t Hyena3;
-Entity_t Scar;
-Entity_t Friend1;
-Entity_t Friend2;
-Entity_t Friend3;
-Entity_t Home;
-static uint8_t orient;
-static uint8_t lxNew;
-static uint8_t rxNew;
-static uint8_t uyNew;
-static uint8_t dyNew;
 void mazeInit(void){
 	ST7735_SetRotation(1);
 	ST7735_DrawBitmap(0, 127, JungleMaze, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
@@ -173,6 +189,22 @@ void mazeInit(void){
 	rxNew = (20 + SPRITE_WIDTH - 1);
 	uyNew = (28 - SPRITE_WIDTH - 1);
 	dyNew = 28;
+
+	H1mvct = 0;
+ 	H2mvct = 0;
+ 	H3mvct = 0;
+ 	Scmvct = 0;
+ 	F1mvct = 0;
+ 	F2mvct = 0;
+	F3mvct = 0;
+	
+	H1vec = 0;
+ 	H2vec = 0;
+ 	H3vec = 0;
+ 	Scvec = 0;
+ 	F1vec = 0;
+ 	F2vec = 0;
+	F3vec = 0;
 }
 
 
@@ -427,8 +459,39 @@ void mazeBattle(Entity_t *player, Entity_t *enemy, uint8_t enemyType){
 }
 
 
-uint8_t randomizePosition(Entity_t *sprite, uint8_t lowLim, uint8_t upLim,){
-	
+void randomizePosition(Entity_t *sprite, uint8_t *mvct, uint8_t dir, int8_t *vec, uint8_t lowLim, uint8_t upLim,){
+	(*mvct)++;
+
+	if (((*mvct)%20) == 0){
+		switch (dir){ // 0 = UD, 1 = LR
+			case 0:
+				if (((*sprite).y == lowLim) || ((*sprite).y == upLim)){
+					(*vec) = -(*vec); // -1 = Down, 1 = Up
+				}
+				switch ((*vec)){
+				case -1:
+					(*vec).y++;
+					break;
+				case 1:
+					(*vec).y--;
+					break;
+				}
+				break;
+			case 1:
+				if (((*sprite).x == lowLim) || ((*sprite).x == upLim)){
+					(*vec) = -(*vec); // -1 = Left, 1 = Right
+				}
+				switch ((*vec)){
+				case -1:
+					(*vec).x--;
+					break;
+				case 1:
+					(*vec).x++;
+					break;
+				}
+				break;
+		}
+	}
 }
 
 
